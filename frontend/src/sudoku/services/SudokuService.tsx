@@ -3,7 +3,15 @@ import type { BoardState } from '../types';
 import { ROWS, COLS } from '../index';
 import { range } from '../../range';
 
+/**
+ * Class for handling sudoku-board operations.
+ * @param {BoardState} state State from the Board-component.
+ * 
+ * @property {number[][]} initialBoard: The initial board. Will not be modified.
+ * @property {number[][]} board: The main board. Will be modified.
+ */
 export default class SudokuService {
+
   initialBoard: number[][];
   board: number[][];
 
@@ -12,6 +20,10 @@ export default class SudokuService {
     this.board = this._parseStateToBoard(state);
   }
 
+  /**
+   * Check if the sudoku-board is valid. 
+   * @return {boolean} Return true if the board is valid, else false.
+   */
   isValid(): boolean {
     let state = new Set();
 
@@ -38,6 +50,13 @@ export default class SudokuService {
     return true;
   }
 
+  /**
+   * Recursive function.
+   * Solve the sudoku-board by trying values and then backtrack if the value is not "legal".
+   * Also, update state of the displayed board.
+   * @param {SetStateAction<BoardState>} setState Update function for displayed board state.
+   * @return {boolean} Return true if solved or closer to solving, else false.
+   */
   solve(setState: Dispatch<SetStateAction<BoardState>>): boolean {
     for (let row of range(ROWS)) {
       for (let col of range(COLS)) {
@@ -65,6 +84,11 @@ export default class SudokuService {
     return true;
   }
 
+  /**
+   * Recursive function. Async implementation of solve(). 
+   * This allows for the displayed board to update through each iteration. 
+   * @return {boolean} Return true if solved or closer to solving, else false.
+   */
   async solveAsync(setState: Dispatch<SetStateAction<BoardState>>): Promise<boolean> {
     await this._sleep(1);
 
@@ -94,10 +118,22 @@ export default class SudokuService {
     return Promise.resolve(true);
   }
 
-  didSolve() {
+  /**
+   * Compare initialBoard to board. 
+   * If the boards are the same, the puzzle was not solved.
+   * @return {boolean} Return true if the boards are not equal, else false.
+   */
+  didSolve(): boolean {
     return JSON.stringify(this.initialBoard) !== JSON.stringify(this.board);
   }
 
+  /**
+   * Check if {value} can be placed in {x} row and {y} column.
+   * @param {number} x Row of the board.
+   * @param {number} y Column of the board.
+   * @param {number} value The number to check.
+   * @return {boolean} Return true if {value} is "legal", else false.
+   */
   _isPossible = (x: number, y: number, value: number): boolean => {
     for (let i of range(3)) {
       for (let j of range(3)) {
@@ -114,6 +150,11 @@ export default class SudokuService {
     return true;
   }
 
+  /**
+   * Parse board-state to a 9x9 matrix.
+   * @param {BoardState} state The state of the board.
+   * @return {number[][]} The sudoku-board as a 9x9 matrix.
+   */
   _parseStateToBoard(state: BoardState): number[][] {
     const board = []
 
@@ -134,6 +175,11 @@ export default class SudokuService {
     return board
   }
 
+  /**
+   * Helper-function for solveAsync().
+   * @param {number} milliseconds How long the function should sleep.
+   * @return {Promise} A promise that resolves with a setTimeout.
+   */
   async _sleep(milliseconds: number): Promise<typeof setTimeout> {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
