@@ -1,0 +1,381 @@
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default padding */
+ul[class],
+ol[class] {
+  padding: 0;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd,
+pre {
+  margin: 0;
+}
+
+/* Set core body defaults */
+body {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1;
+  background-color: #fafafa;
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background-color: #f3f3f3;
+  padding: 2px;
+  border-radius: 2px;
+}
+
+code[class*=language-], pre[class*=language-] {
+  background-color: rgba(255, 255, 255, 0) !important;
+  line-height: 1.42;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-size: 15px !important;
+}
+
+/* Remove list styles on ul, ol elements with a class attribute */
+ul[class],
+ol[class] {
+  list-style-type: none;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+p {
+  line-height: 1.42;
+}
+
+/* Make images easier to work with */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Natural flow and rhythm in articles by default */
+article > * + * {
+  margin-top: 1em;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.app {
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.navbar {
+  height: 42px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  background-color: #1d1d1d;
+  color: white;
+  font-size: 1.25rem;
+}
+
+.main{
+  width: 540px;
+  height: 540px;
+  margin: 0 auto;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  @media screen and (max-width: 500px) {
+    width: 315px;
+    height: 315px;
+  }
+}
+
+.board-container {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  p {
+    margin-top: 8px;
+    color: #1d1d1d;
+  }
+
+  .message {
+    margin-top: 16px;
+    font-size: 1.25rem;
+    font-weight: 500;
+
+    &.error {
+      color: rgb(255, 59, 48);
+    }
+  }
+}
+
+.board {
+  position: relative;
+  width: 540px;
+  height: 540px;
+  display: grid;
+  grid-template-rows: repeat(9, 1fr);
+  gap: 1px;
+  border: 2px solid #000;
+  border-radius: .5rem;
+  background-color: #666;
+  overflow: hidden;
+
+  @media screen and (max-width: 500px) {
+    width: 315px;
+    height: 315px;
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  pointer-events: none;
+
+  div {
+    -webkit-appearance: none;
+    -webkit-box-shadow: 0 0 0 1px #000;
+    box-shadow: 0 0 0 1px #000;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 1px;
+}
+
+.box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+
+  input {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: rgba(255, 255, 255, 0);
+    text-align: center;
+    font-size: 24px;
+    outline: none;
+
+    &:focus {
+      background-color: rgba(0, 122, 255, .1)
+    }
+
+    @media screen and (max-width: 500px) {
+      font-size: 20px;
+    }
+  }
+}
+
+.btn {
+  width: 100%;
+  height: 48px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: .5rem;
+  background: rgb(40,40,40);
+  background: radial-gradient(circle, rgba(62, 62, 62, 1) 0%, rgba(34, 34, 34, 1) 100%);
+  background-size: 200%;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  outline: none;
+  will-change: transform;
+  transition: transform 50ms ease;
+  cursor: pointer;
+
+  &.blue {
+    background: rgb(0, 122, 255);
+    background: radial-gradient(circle, rgba(40, 140, 255, 1) 0%, rgba(0, 122, 255, 1) 100%);
+    background-size: 200%;
+  }
+
+  &.orange {
+    background: rgb(246, 71, 64);
+    background: radial-gradient(circle, rgba(255, 80, 70, 1) 0%, rgba(246, 71, 64, 1) 100%);
+    background-size: 200%;
+  }
+
+  &:disabled{
+    opacity: .85;
+    cursor: not-allowed;
+  }
+
+  &:active{
+    transform: scale(.975)
+  }
+
+  &.--is-loading {
+    @for $i from 1 through 3 {
+      span:nth-of-type(#{$i}) {
+        display: block;
+        animation: 500ms ease calc(500ms / 3 * #{$i - 1}) infinite alternate button-spinner;
+      }
+    }
+  
+    @keyframes button-spinner {
+      from {
+        transform: scale(1);
+      }
+    
+      to {
+        transform: scale(2) translateY(-1px);
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    height: 42px;
+  }
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+
+  small {
+    color: #1d1d1d;
+  }
+}
+
+.switch {
+  position: relative;
+  width: 60px;
+  height: 34px;
+  margin: 8px;
+  margin-left: 0;
+  display: inline-block;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #eee;
+  -webkit-transition: transform ease 300ms, background-color ease 300ms;
+  transition: transform ease 300ms, background-color ease 300ms;
+  cursor: pointer;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #fff;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: rgba(0, 122, 255, 1);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+  -webkit-box-shadow: 0 0 8px -2px rgba($color: #000000, $alpha: .05);
+  box-shadow: 0 0 8px -2px rgba($color: #000000, $alpha: .05);
+}
+
+.note {
+  margin-bottom: 16px;
+  display: block;
+  line-height: 1.5;
+  color: #666;
+}
