@@ -57,7 +57,7 @@ export default class SudokuService {
    * @param {SetStateAction<BoardState>} setState Update function for displayed board state.
    * @return {boolean} Return true if solved or closer to solving, else false.
    */
-  solve(setState: Dispatch<SetStateAction<BoardState>>): boolean {
+  solve(setState?: Dispatch<SetStateAction<BoardState>>): boolean {
     for (let row of range(ROWS)) {
       for (let col of range(COLS)) {
         if (this.board[row][col] === 0) {
@@ -65,13 +65,13 @@ export default class SudokuService {
             if (this._isPossible(row, col, n)) {
 
               this.board[row][col] = n;
-              setState!(prev => ({ ...prev, [`r${row}c${col}`]: String(n) }));
+              setState?.(prev => ({ ...prev, [`r${row}c${col}`]: String(n) }));
 
               if (this.solve(setState)) {
                 return true;
               } else {
                 this.board[row][col] = 0;
-                setState!(prev => ({ ...prev, [`r${row}c${col}`]: '' }));
+                setState?.(prev => ({ ...prev, [`r${row}c${col}`]: '' }));
               }
             }
           }
@@ -89,7 +89,7 @@ export default class SudokuService {
    * This allows for the displayed board to update through each iteration. 
    * @return {boolean} Return true if solved or closer to solving, else false.
    */
-  async solveAsync(setState: Dispatch<SetStateAction<BoardState>>): Promise<boolean> {
+  async solveAsync(setState?: Dispatch<SetStateAction<BoardState>>): Promise<boolean> {
     await this._sleep(1);
 
     for (let row of range(ROWS)) {
@@ -99,13 +99,13 @@ export default class SudokuService {
             if (this._isPossible(row, col, n)) {
 
               this.board[row][col] = n;
-              setState!(prev => ({ ...prev, [`r${row}c${col}`]: String(n) }));
+              setState?.(prev => ({ ...prev, [`r${row}c${col}`]: String(n) }));
 
               if (await this.solveAsync(setState)) {
                 return Promise.resolve(true);
               } else {
                 this.board[row][col] = 0;
-                setState!(prev => ({ ...prev, [`r${row}c${col}`]: '' }));
+                setState?.(prev => ({ ...prev, [`r${row}c${col}`]: '' }));
               }
             }
           }

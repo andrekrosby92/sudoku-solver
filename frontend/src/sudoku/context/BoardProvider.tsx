@@ -10,7 +10,7 @@ interface BoardProviderProps {
 }
 
 export default function BoardProvider(props: BoardProviderProps) {
-  const [state, setState] = useState({});
+  const [state, setState] = useState(() => resetState());
   const [willSolveAsync, setWillSolveAsync] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
   const [didSolve, setDidSolve] = useState<boolean | null>(null);
@@ -29,22 +29,12 @@ export default function BoardProvider(props: BoardProviderProps) {
       }
 
       return obj;
-    })
+    });
   }
 
   function clearBoard(): void {
     setDidSolve(null);
-    setState(() => {
-      const obj: BoardState = {};
-
-      for (let row of range(ROWS)) {
-        for (let col of range(COLS)) {
-          obj[`r${row}c${col}`] = '';
-        }
-      }
-
-      return obj;
-    })
+    setState(() => resetState());
   }
 
   const context = {
@@ -65,4 +55,16 @@ export default function BoardProvider(props: BoardProviderProps) {
       {props.children}
     </BoardContext.Provider>
   )
+}
+
+function resetState(): BoardState {
+  const obj: BoardState = {};
+
+  for (let row of range(ROWS)) {
+    for (let col of range(COLS)) {
+      obj[`r${row}c${col}`] = '';
+    }
+  }
+
+  return obj;
 }
