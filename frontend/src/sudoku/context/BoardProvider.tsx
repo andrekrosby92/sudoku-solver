@@ -18,6 +18,7 @@ export default function BoardProvider(props: BoardProviderProps) {
   useEffect(() => { setDefaultBoardToState(); }, [])
 
   function setDefaultBoardToState(): void {
+    setDidSolve(null);
     setState(() => {
       const obj: BoardState = {};
 
@@ -32,6 +33,7 @@ export default function BoardProvider(props: BoardProviderProps) {
   }
 
   function clearBoard(): void {
+    setDidSolve(null);
     setState(() => {
       const obj: BoardState = {};
 
